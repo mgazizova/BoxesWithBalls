@@ -73,7 +73,51 @@ namespace BoxesWithBalls
             return mergedBallsInBox;
         }
 
-        public static bool Equals(List<Balls> lb1, List<Balls> lb2)
+        public static List<Balls> DifferenceBallsInBoxes(List<Balls> lb1, List<Balls> lb2)
+        {
+            var differenceBallsInBox = new List<Balls>();
+            var matches = false; //нашли совпадение совпадение
+            foreach (var balls2 in lb2)
+            {
+                matches = false;
+                foreach (var balls1 in lb1)
+                {
+                    if (balls2.color == balls1.color)
+                    {
+                        matches = true;
+                        break;
+                    }
+                }
+                if (matches == false)
+                {
+                    Console.WriteLine("Error in the difference operation!");    //в первом листе нет шаров подходящего цвета
+                }
+            }
+            foreach (var balls1 in lb1)
+            {
+                matches = false;
+                foreach (var balls2 in lb2)
+                {
+                    if (balls1.color == balls2.color && balls1.number > balls2.number)
+                    {
+                        differenceBallsInBox.Add(new Balls(balls1.number - balls2.number, balls1.color));
+                        matches = true;
+                        break;
+                    }
+                    else if (balls1.color == balls2.color && balls1.number < balls2.number)
+                    {
+                        Console.WriteLine("Error in the difference operation!");   //пытаемся вычесть слишком большое количество шаров
+                    }
+                }
+                if (matches == false)
+                {
+                    differenceBallsInBox.Add(new Balls(balls1.number, balls1.color));
+                }
+            }
+            return differenceBallsInBox;
+        }
+
+        public static bool EqualsBallsInBoxes(List<Balls> lb1, List<Balls> lb2)
         {
             var isListEquals = true;
             var flag = false;
@@ -102,7 +146,7 @@ namespace BoxesWithBalls
             return isListEquals;
         }
 
-        public Box()
+        public Box()    
         {
             ballsInBox = new List<Balls>();
         }
@@ -117,15 +161,20 @@ namespace BoxesWithBalls
             ballsInBox = box.ballsInBox;
         }
 
-        public static Box operator +(Box box1, Box box2)
+        public static Box operator + (Box box1, Box box2)
         {
             return new Box(MergeBallsInBoxes(box1.ballsInBox, box2.ballsInBox));
+        }
+
+        public static Box operator - (Box box1, Box box2)
+        {
+            return new Box(DifferenceBallsInBoxes(box1.ballsInBox, box2.ballsInBox));
         }
 
         public static bool operator == (Box box1, Box box2)
         {
             //если первый равен второму И второй первому
-            if (Equals(box1.ballsInBox, box2.ballsInBox) == true && Equals(box2.ballsInBox, box1.ballsInBox) == true)
+            if (EqualsBallsInBoxes(box1.ballsInBox, box2.ballsInBox) == true && EqualsBallsInBoxes(box2.ballsInBox, box1.ballsInBox) == true)
                 return true;
             else
                 return false;
@@ -133,7 +182,7 @@ namespace BoxesWithBalls
 
         public static bool operator != (Box box1, Box box2)
         {
-            if (Equals(box1.ballsInBox, box2.ballsInBox) == true && Equals(box2.ballsInBox, box1.ballsInBox) == true)
+            if (EqualsBallsInBoxes(box1.ballsInBox, box2.ballsInBox) == true && EqualsBallsInBoxes(box2.ballsInBox, box1.ballsInBox) == true)
                 return false;
             else
                 return true;
