@@ -93,6 +93,15 @@ namespace BoxesWithBalls
             return new Box(MergeBallsInBoxes(box1.ballsInBox, box2.ballsInBox));
         }
 
+        public static bool operator = (Box box1, Box box2)
+        {
+
+        }
+
+        public static bool operator != (Box box1, Box box 2)
+        {
+
+        }
 
         ~Box()
         {
