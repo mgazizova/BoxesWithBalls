@@ -73,6 +73,35 @@ namespace BoxesWithBalls
             return mergedBallsInBox;
         }
 
+        public static bool Equals(List<Balls> lb1, List<Balls> lb2)
+        {
+            var isListEquals = true;
+            var flag = false;
+            foreach (Balls balls1 in lb1)
+            {
+                flag = false;
+                foreach (Balls balls2 in lb2)
+                {
+                    if (balls1.color == balls2.color)
+                    {
+                        if (balls1.number != balls2.number)
+                        {
+                            isListEquals = false;
+                            break;
+                        }
+                        else
+                            flag = true;    //нашли совпадение по цвету и количеству
+                    }
+                }
+                if (flag == false)  //совпадений не найдено
+                {
+                    isListEquals = false;
+                    break;
+                }
+            }
+            return isListEquals;
+        }
+
         public Box()
         {
             ballsInBox = new List<Balls>();
@@ -93,14 +122,21 @@ namespace BoxesWithBalls
             return new Box(MergeBallsInBoxes(box1.ballsInBox, box2.ballsInBox));
         }
 
-        public static bool operator = (Box box1, Box box2)
+        public static bool operator == (Box box1, Box box2)
         {
-
+            //если первый равен второму И второй первому
+            if (Equals(box1.ballsInBox, box2.ballsInBox) == true && Equals(box2.ballsInBox, box1.ballsInBox) == true)
+                return true;
+            else
+                return false;
         }
 
-        public static bool operator != (Box box1, Box box 2)
+        public static bool operator != (Box box1, Box box2)
         {
-
+            if (Equals(box1.ballsInBox, box2.ballsInBox) == true && Equals(box2.ballsInBox, box1.ballsInBox) == true)
+                return false;
+            else
+                return true;
         }
 
         ~Box()
