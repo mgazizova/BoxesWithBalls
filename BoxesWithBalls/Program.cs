@@ -11,7 +11,11 @@ namespace BoxesWithBalls
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello");
+            Balls yellowBalls = new Balls(3, Balls.Colors.Yellow);
+            List<Balls> listBalls1 = new List<Balls> ();
+            listBalls1.Add(yellowBalls);
+            Box boxWithBalls1 = new Box(listBalls1);
+            boxWithBalls1.showBox();
         }
     }
 
@@ -146,6 +150,13 @@ namespace BoxesWithBalls
             return isListEquals;
         }
 
+        public static void ShowBallsInBox(List<Balls> lb1)
+        {
+            foreach (Balls balls in lb1)
+            {
+                Console.WriteLine("Color: {0}   Count: {1}", balls.color, balls.number);
+            }
+        }
         public Box()    
         {
             ballsInBox = new List<Balls>();
@@ -196,10 +207,15 @@ namespace BoxesWithBalls
                 return false;
         }
 
-        public static Box ClearBox(Box box1)
+        public void showBox()
+        {
+            ShowBallsInBox(this.ballsInBox);
+        }
+
+        public Box ClearBox()
         {
             return new Box();
-        }
+        } 
 
         ~Box()
         {
@@ -236,6 +252,5 @@ namespace BoxesWithBalls
             Unknown
         }
     }
-
 
 }
