@@ -196,6 +196,11 @@ namespace BoxesWithBalls
                 return false;
         }
 
+        public static Box ClearBox(Box box1)
+        {
+            return new Box();
+        }
+
         ~Box()
         {
             Console.WriteLine("Сработал деструктор");
