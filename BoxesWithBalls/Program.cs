@@ -16,6 +16,9 @@ namespace BoxesWithBalls
             listBalls1.Add(yellowBalls);
             Box boxWithBalls1 = new Box(listBalls1);
             boxWithBalls1.showBox();
+            Console.WriteLine(listBalls1.Count);
+            boxWithBalls1.GetRandomBalls(1);
+            boxWithBalls1.showBox();
         }
     }
 
@@ -157,6 +160,23 @@ namespace BoxesWithBalls
                 Console.WriteLine("Color: {0}   Count: {1}", balls.color, balls.number);
             }
         }
+
+        public static List<Balls> GetRandomBallFromBox(List<Balls> lb1)
+        {
+            if (lb1.Count!=0)
+            {
+                Random rnd = new Random();
+                int index = rnd.Next(lb1.Count);
+                if (lb1[index].number > 1)
+                    lb1[index].number-- ;
+                else
+                    lb1.RemoveAt(index);
+            }
+            else
+                Console.WriteLine("Error while getting balls! ");  
+            return lb1;        
+        }
+
         public Box()    
         {
             ballsInBox = new List<Balls>();
@@ -216,6 +236,16 @@ namespace BoxesWithBalls
         {
             return new Box();
         } 
+
+        public Box GetRandomBalls(int number)
+        {
+            //достать number случайных шаров
+            for (int i=0; i<number; i++)
+            {
+                this.ballsInBox = GetRandomBallFromBox(this.ballsInBox);
+            }
+            return new Box(ballsInBox);
+        }
 
         ~Box()
         {
