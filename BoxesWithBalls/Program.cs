@@ -117,7 +117,7 @@ namespace BoxesWithBalls
             return differenceBallsInBox;
         }
 
-        public static bool EqualsBallsInBoxes(List<Balls> lb1, List<Balls> lb2)
+        public static bool ContainsEqualsBallsInBoxes(List<Balls> lb1, List<Balls> lb2)
         {
             var isListEquals = true;
             var flag = false;
@@ -174,7 +174,7 @@ namespace BoxesWithBalls
         public static bool operator == (Box box1, Box box2)
         {
             //если первый равен второму И второй первому
-            if (EqualsBallsInBoxes(box1.ballsInBox, box2.ballsInBox) == true && EqualsBallsInBoxes(box2.ballsInBox, box1.ballsInBox) == true)
+            if (ContainsEqualsBallsInBoxes(box1.ballsInBox, box2.ballsInBox) == true && ContainsEqualsBallsInBoxes(box2.ballsInBox, box1.ballsInBox) == true)
                 return true;
             else
                 return false;
@@ -182,10 +182,18 @@ namespace BoxesWithBalls
 
         public static bool operator != (Box box1, Box box2)
         {
-            if (EqualsBallsInBoxes(box1.ballsInBox, box2.ballsInBox) == true && EqualsBallsInBoxes(box2.ballsInBox, box1.ballsInBox) == true)
+            if (ContainsEqualsBallsInBoxes(box1.ballsInBox, box2.ballsInBox) == true && ContainsEqualsBallsInBoxes(box2.ballsInBox, box1.ballsInBox) == true)
                 return false;
             else
                 return true;
+        }
+
+        public static bool containsBoxes(Box box1, Box box2)    //проверка на включение одного контейнера в другой
+        {
+            if (ContainsEqualsBallsInBoxes(box2.ballsInBox, box2.ballsInBox)==true)
+                return true;
+            else 
+                return false;
         }
 
         ~Box()
