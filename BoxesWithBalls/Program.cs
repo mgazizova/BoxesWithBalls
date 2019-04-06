@@ -11,14 +11,52 @@ namespace BoxesWithBalls
     {
         static void Main(string[] args)
         {
-            Balls yellowBalls = new Balls(3, Balls.Colors.Yellow);
-            List<Balls> listBalls1 = new List<Balls> ();
-            listBalls1.Add(yellowBalls);
-            Box boxWithBalls1 = new Box(listBalls1);
-            boxWithBalls1.showBox();
-            Console.WriteLine(listBalls1.Count);
-            boxWithBalls1.GetRandomBalls(1);
-            boxWithBalls1.showBox();
+            while (true)
+            {
+                
+                List<Balls> listBalls1 = new List<Balls>();
+
+                Balls greenBalls = new Balls(3, Balls.Colors.Green);
+                Balls yellowBalls = new Balls(3, Balls.Colors.Yellow);
+                Balls blueBalls = new Balls(3, Balls.Colors.Blue);
+
+                listBalls1.Add(yellowBalls);
+                listBalls1.Add(greenBalls);
+                listBalls1.Add(blueBalls);
+
+                Box boxWithBalls1 = new Box(listBalls1);
+                boxWithBalls1.showBox();
+
+                Console.WriteLine();
+                Console.WriteLine();
+
+                List<Balls> listBalls2 = new List<Balls>();
+
+                Balls greenBalls2 = new Balls(1, Balls.Colors.Green);
+                Balls yellowBalls2 = new Balls(1, Balls.Colors.White);
+                Balls blueBalls2 = new Balls(1, Balls.Colors.Blue);
+
+                listBalls2.Add(yellowBalls2);
+                listBalls2.Add(greenBalls2);
+                listBalls2.Add(blueBalls2);
+
+                Box boxWithBalls2 = new Box(listBalls2);
+                boxWithBalls2.showBox();
+
+                Console.WriteLine();
+                Console.WriteLine();
+                //Console.WriteLine(listBalls1.Count);
+                //boxWithBalls1.GetRandomBalls(5);
+                //boxWithBalls1.showBox();
+                Box.PutFromOneToAnother(boxWithBalls1,boxWithBalls2, 5);
+                //boxWithBalls1.GetColorBall(Balls.Colors.Black);
+                //boxWithBalls1.showBox();
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.ReadKey();
+            }
+            
         }
     }
 
@@ -161,6 +199,15 @@ namespace BoxesWithBalls
             }
         }
 
+        public static Box PutFromOneToAnother(Box b1, Box b2, int number)
+        {
+            var b111=new Box(b1.ballsInBox);
+            var b11 = GetRandomBalls(b111, number); // это говнище
+            var tembBox = b1 - b11;
+            b2 = b2 + tembBox;
+            return b2;
+        }
+
         public static List<Balls> GetRandomBallFromBox(List<Balls> lb1)
         {
             if (lb1.Count!=0)
@@ -237,13 +284,45 @@ namespace BoxesWithBalls
             return new Box();
         } 
 
-        public Box GetRandomBalls(int number)
+        public static Box GetRandomBalls(Box box, int number)
         {
+            var newBoxWithoutNumberOfBalls = new Box(box);
             //достать number случайных шаров
             for (int i=0; i<number; i++)
             {
-                this.ballsInBox = GetRandomBallFromBox(this.ballsInBox);
+                if (newBoxWithoutNumberOfBalls.ballsInBox.Count != 0)
+                {
+                    newBoxWithoutNumberOfBalls.ballsInBox = GetRandomBallFromBox(newBoxWithoutNumberOfBalls.ballsInBox);
+                }
+                else
+                {
+                    Console.WriteLine("Error while getting balls! ");
+                    break;
+                }
             }
+            return new Box(newBoxWithoutNumberOfBalls.ballsInBox);
+        }
+
+        public Box GetColorBall(Balls.Colors color)
+        {
+            var colorExist = false;
+            foreach (var balls in ballsInBox)
+            {
+                if (balls.color == color)
+                {
+                    colorExist = true;
+                    if (balls.number > 1)
+                        balls.number--;
+                    else
+                        ballsInBox.Remove(balls);
+                }
+            }
+
+            if (colorExist == false)
+            {
+                Console.WriteLine($"Error! {color} color does not exist in the box.");
+            }
+
             return new Box(ballsInBox);
         }
 
