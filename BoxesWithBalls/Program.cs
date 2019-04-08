@@ -12,8 +12,7 @@ namespace BoxesWithBalls
         static void Main(string[] args)
         {
             while (true)
-            {
-                
+            {              
                 List<Balls> listBalls1 = new List<Balls>();
 
                 Balls greenBalls = new Balls(3, Balls.Colors.Green);
@@ -50,7 +49,8 @@ namespace BoxesWithBalls
                 //boxWithBalls1.showBox();
                 Box.PutFromOneToAnother(boxWithBalls1,boxWithBalls2, 5);
                 //boxWithBalls1.GetColorBall(Balls.Colors.Black);
-                //boxWithBalls1.showBox();
+                Console.WriteLine("1");
+                boxWithBalls1.showBox();
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine();
@@ -201,8 +201,7 @@ namespace BoxesWithBalls
 
         public static Box PutFromOneToAnother(Box b1, Box b2, int number)
         {
-            var b111=new Box(b1.ballsInBox);
-            var b11 = GetRandomBalls(b111, number); // это говнище
+            var b11 = GetRandomBalls(b1, number); // это говнище
             var tembBox = b1 - b11;
             b2 = b2 + tembBox;
             return b2;
@@ -231,12 +230,29 @@ namespace BoxesWithBalls
 
         public Box(List<Balls> lb)
         {
-            ballsInBox = lb;
+            this.ballsInBox = lb;
         }
 
         public Box(Box box)
+        {           
+            this.ballsInBox = box.ballsInBox;
+        }
+        
+        public Box CloneBox()
         {
-            ballsInBox = box.ballsInBox;
+            List<Balls> listBalls = new List<Balls>();
+            listBalls = this.CopyList();
+            return new Box(listBalls) as Box;
+        }
+
+        public List<Balls> CopyList()
+        {
+            List<Balls> tempList = new List<Balls>();
+            foreach (var ball in this.ballsInBox)
+            {
+                tempList.Add(new Balls(ball.number, ball.color));
+            }
+            return tempList;
         }
 
         public static Box operator + (Box box1, Box box2)
@@ -286,7 +302,7 @@ namespace BoxesWithBalls
 
         public static Box GetRandomBalls(Box box, int number)
         {
-            var newBoxWithoutNumberOfBalls = new Box(box);
+            Box newBoxWithoutNumberOfBalls = box.CloneBox();
             //достать number случайных шаров
             for (int i=0; i<number; i++)
             {
