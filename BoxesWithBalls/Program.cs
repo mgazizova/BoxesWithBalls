@@ -143,9 +143,10 @@ namespace BoxesWithBalls
                 matches = false;
                 foreach (var balls2 in lb2)
                 {
-                    if (balls1.color == balls2.color && balls1.number > balls2.number)
-                    {
-                        differenceBallsInBox.Add(new Balls(balls1.number - balls2.number, balls1.color));
+                    if (balls1.color == balls2.color && balls1.number >= balls2.number)
+                    {   
+                        if (balls1.color == balls2.color)
+                            differenceBallsInBox.Add(new Balls(balls1.number - balls2.number, balls1.color));
                         matches = true;
                         break;
                     }
