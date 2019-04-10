@@ -4,13 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace BoxesWithBalls
 {
     class Program
     {
         public static void Experiment(List<Box> container1)
-        {           
+        {
+            Console.WriteLine("Выполнение внутри потока из пула {0}", Thread.CurrentThread.ManagedThreadId);
             Box box1 = new Box(((List<Box>)container1)[0]);
             Box box2 = new Box(((List<Box>)container1)[1]);
             Box box3 = new Box(((List<Box>)container1)[2]);
@@ -41,10 +43,9 @@ namespace BoxesWithBalls
             Console.WriteLine("Result Box: ");
             result.showBox();
         }
+
         static void Main(string[] args)
-        {
-            while (true)
-            {              
+        {           
                 List<Balls> listBalls1 = new List<Balls>();
                 List<Balls> listBalls2 = new List<Balls>();
                 List<Balls> listBalls3 = new List<Balls>();
@@ -74,9 +75,20 @@ namespace BoxesWithBalls
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine();
-                Experiment(allBoxes);
+
+            while (true)
+            {
+                int nWorkerThreads;
+                int nCompletionThreads;
+                ThreadPool.GetMaxThreads(out nWorkerThreads, out nCompletionThreads);
+                Console.WriteLine("Максимальное количество потоков: " + nWorkerThreads
+                    + "\nПотоков ввода-вывода доступно: " + nCompletionThreads);
+                ThreadPool.QueueUserWorkItem(s => Experiment(allBoxes));
+                Thread.Sleep(100);
+                Console.WriteLine();
+
                 Console.ReadKey();
-            }   
+            }
         }
     }
 
@@ -374,7 +386,7 @@ namespace BoxesWithBalls
 
         ~Box()
         {
-            Console.WriteLine("Сработал деструктор");
+           // Console.WriteLine("Сработал деструктор");
         }
     }
 
