@@ -9,54 +9,74 @@ namespace BoxesWithBalls
 {
     class Program
     {
+        public static void Experiment(List<Box> container1)
+        {           
+            Box box1 = new Box(((List<Box>)container1)[0]);
+            Box box2 = new Box(((List<Box>)container1)[1]);
+            Box box3 = new Box(((List<Box>)container1)[2]);
+            Box box4 = new Box(((List<Box>)container1)[3]);
+            Box box5 = new Box(((List<Box>)container1)[4]);
+
+            box2 = box1.nonStaticPutFromOneToAnother(box2, 2);
+            box3 = box2.nonStaticPutFromOneToAnother(box3, 2);
+            box4 = box3.nonStaticPutFromOneToAnother(box4, 2);
+            box5 = box4.nonStaticPutFromOneToAnother(box5, 2);
+            Box temp = new Box();
+            temp = Box.GetRandomBalls(box5, 2);
+            Console.WriteLine("1: ");
+            box1.showBox();
+            Console.WriteLine("2: ");
+            box2.showBox();
+            Console.WriteLine("3: ");
+            box3.showBox();
+            Console.WriteLine("4: ");
+            box4.showBox();
+            Console.WriteLine("5: ");
+            box5.showBox();
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Box result = new Box();
+            result = box5 - temp;
+            Console.WriteLine("Result Box: ");
+            result.showBox();
+        }
         static void Main(string[] args)
         {
             while (true)
             {              
                 List<Balls> listBalls1 = new List<Balls>();
+                List<Balls> listBalls2 = new List<Balls>();
+                List<Balls> listBalls3 = new List<Balls>();
+                List<Balls> listBalls4 = new List<Balls>();
+                List<Balls> listBalls5 = new List<Balls>();
 
-                Balls greenBalls = new Balls(3, Balls.Colors.Green);
-                Balls yellowBalls = new Balls(3, Balls.Colors.Yellow);
-                Balls blueBalls = new Balls(3, Balls.Colors.Blue);
+                Balls greenBalls = new Balls(5, Balls.Colors.Green);
+                Balls yellowBalls = new Balls(5, Balls.Colors.Yellow);
+                Balls blueBalls = new Balls(5, Balls.Colors.Blue);
+                Balls whiteBalls = new Balls(5, Balls.Colors.White);
+                Balls redBalls = new Balls(5, Balls.Colors.Red);
 
                 listBalls1.Add(yellowBalls);
-                listBalls1.Add(greenBalls);
-                listBalls1.Add(blueBalls);
+                listBalls2.Add(greenBalls);
+                listBalls3.Add(blueBalls);
+                listBalls4.Add(whiteBalls);
+                listBalls5.Add(redBalls);
 
                 Box boxWithBalls1 = new Box(listBalls1);
-                boxWithBalls1.showBox();
-
-                Console.WriteLine();
-                Console.WriteLine();
-
-                List<Balls> listBalls2 = new List<Balls>();
-
-                Balls greenBalls2 = new Balls(1, Balls.Colors.Green);
-                Balls yellowBalls2 = new Balls(1, Balls.Colors.White);
-                Balls blueBalls2 = new Balls(1, Balls.Colors.Blue);
-
-                listBalls2.Add(yellowBalls2);
-                listBalls2.Add(greenBalls2);
-                listBalls2.Add(blueBalls2);
-
                 Box boxWithBalls2 = new Box(listBalls2);
-                boxWithBalls2.showBox();
+                Box boxWithBalls3 = new Box(listBalls3);
+                Box boxWithBalls4 = new Box(listBalls4);
+                Box boxWithBalls5 = new Box(listBalls5);
+
+                var allBoxes = new List<Box> { boxWithBalls1, boxWithBalls2, boxWithBalls3, boxWithBalls4, boxWithBalls5};
 
                 Console.WriteLine();
                 Console.WriteLine();
-                //Console.WriteLine(listBalls1.Count);
-                //boxWithBalls1.GetRandomBalls(5);
-                //boxWithBalls1.showBox();
-                Box.PutFromOneToAnother(boxWithBalls1,boxWithBalls2, 5);
-                //boxWithBalls1.GetColorBall(Balls.Colors.Black);
-                Console.WriteLine("1");
-                boxWithBalls1.showBox();
                 Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
+                Experiment(allBoxes);
                 Console.ReadKey();
-            }
-            
+            }   
         }
     }
 
@@ -145,7 +165,7 @@ namespace BoxesWithBalls
                 {
                     if (balls1.color == balls2.color && balls1.number >= balls2.number)
                     {   
-                        if (balls1.color == balls2.color)
+                        if (balls1.number > balls2.number)
                             differenceBallsInBox.Add(new Balls(balls1.number - balls2.number, balls1.color));
                         matches = true;
                         break;
@@ -203,9 +223,18 @@ namespace BoxesWithBalls
         public static Box PutFromOneToAnother(Box b1, Box b2, int number)
         {
             var b11 = GetRandomBalls(b1, number); // это говнище
-            var tembBox = b1 - b11;
-            b2 = b2 + tembBox;
-            return b2;
+            var tempBox = b1 - b11;
+            b2 = b2 + tempBox;
+            return b2; //будем возвращать шары, которые мы переложили?
+        }
+
+        public Box nonStaticPutFromOneToAnother(Box b2, int number)
+        {
+            var b11 = GetRandomBalls(this, number); // это говнище
+            var tempBox = this - b11;
+            b2 = b2 + tempBox;
+            this.ballsInBox = b11.ballsInBox;
+            return b2; //будем возвращать шары, которые мы переложили?
         }
 
         public static List<Balls> GetRandomBallFromBox(List<Balls> lb1)
@@ -347,7 +376,6 @@ namespace BoxesWithBalls
         {
             Console.WriteLine("Сработал деструктор");
         }
-
     }
 
     class Balls
@@ -378,5 +406,4 @@ namespace BoxesWithBalls
             Unknown
         }
     }
-
 }
